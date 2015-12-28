@@ -17,6 +17,7 @@ qjcg_mysql = dict(host='192.168.3.250',
 sn_file = 'sn_csv.csv'
 
 from torndb import Connection
+import os
 
 wcg_db = Connection(**wcg_mysql)
 qjcg_db = Connection(**qjcg_mysql)
@@ -54,7 +55,19 @@ def step2_sn_csv():
             print "sn csv end----------------"
 
 
+def step3_car_ter_excel():
+    if os.path.exists(sn_file):
+        with open(sn_file) as f:
+            for sn in f:
+                sn = sn.split(",")[0]
+                sql = "SELECT activate_code as ac from t_sn where sn = '%s'" % sn
+                ac_code = qjcg_db.get(sql)
+                if ac_code:
+                    ac = ac_code['ac']
+                    # todo get cnum and vin
+
 if __name__ == '__main__':
     # step1_iccid()
-    step2_sn_csv()
+    # step2_sn_csv()
+    # step3_car_ter_excel()
     pass
